@@ -1,0 +1,34 @@
+<h1>Edges</h1>
+
+<div class="row">
+    <div class="form-group col-xs-3">
+        <label>Search</label>
+        <input type="search" name="search" placeholder="search something" ng-model="filterBy.search"
+               class="form-control"/>
+    </div>
+    <div class="form-group col-xs-3">
+        <label for="category_id">Category</label>
+        <select class="form-control" name="category" id="category_id"
+                ng-model="filterBy.category"
+                ng-options="c.name for c in categories">
+        </select>
+    </div>
+    <div class="form-group col-xs-3">
+        <label for="rank_id">Rank</label>
+        <select class="form-control" name="rank" id="rank_id"
+                ng-model="filterBy.rank"
+                ng-options="c.name for c in ranks">
+        </select>
+    </div>
+</div>
+
+<ul>
+    <li ng-repeat-start="edge in edges | filter:{name: filterBy.search} | edges:filterBy" ng-click="selectEdge(edge)">
+        <span class="label label-default">{{edge.category.name}}</span>
+        {{edge.name}}
+        <span class="text-muted">({{ displayRequirements(edge.requirements) }})</span>
+    </li>
+    <li ng-repeat-end ng-show="isSelected(edge)">
+        {{edge.description}}
+    </li>
+</ul>
