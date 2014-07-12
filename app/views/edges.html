@@ -1,34 +1,68 @@
 <h1>Edges</h1>
 
 <div class="row">
-    <div class="form-group col-xs-3">
-        <label>Search</label>
-        <input type="search" name="search" placeholder="search something" ng-model="filterBy.search"
-               class="form-control"/>
+    <div class="col-md-8">
+        <div class="row">
+            <div class="form-group col-xs-4">
+                <label>Search</label>
+                <input type="search" name="search" placeholder="search something" ng-model="filterBy.search"
+                       class="form-control"/>
+            </div>
+            <div class="form-group col-xs-4">
+                <label for="category_id">Category</label>
+                <select class="form-control" name="category" id="category_id"
+                        ng-model="filterBy.category"
+                        ng-options="c.name for c in categories">
+                </select>
+            </div>
+            <div class="form-group col-xs-4">
+                <label for="rank_id">Rank</label>
+                <select class="form-control" name="rank" id="rank_id"
+                        ng-model="filterBy.rank"
+                        ng-options="c.name for c in ranks">
+                </select>
+            </div>
+            <ul class="col-md-12">
+                <li ng-repeat-start="edge in edges | filter:{name: filterBy.search} | edges:filterBy" ng-click="selectEdge(edge)">
+                    <span class="label label-default">{{edge.category.name}}</span>
+                    {{edge.name}}
+                    <span class="text-muted">({{ displayRequirements(edge.requirements) }})</span>
+                </li>
+                <li ng-repeat-end ng-show="isSelected(edge)">
+                    {{edge.description}}
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="form-group col-xs-3">
-        <label for="category_id">Category</label>
-        <select class="form-control" name="category" id="category_id"
-                ng-model="filterBy.category"
-                ng-options="c.name for c in categories">
-        </select>
-    </div>
-    <div class="form-group col-xs-3">
-        <label for="rank_id">Rank</label>
-        <select class="form-control" name="rank" id="rank_id"
-                ng-model="filterBy.rank"
-                ng-options="c.name for c in ranks">
-        </select>
+    <div class="col-md-4" ng-show="isLoggedIn()">
+        <form name="newEdgeForm" ng-submit="createEdge()">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="name" ng-model="newEdge.name" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" ng-model="newEdge.description" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select class="form-control" name="category"
+                        ng-model="newEdge.category"
+                        ng-options="c.name for c in serverCategories">
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Rank</label>
+                <select class="form-control" name="rank"
+                        ng-model="newEdge.rank"
+                        ng-options="c.name for c in clearRanks">
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">Create</button>
+            </div>
+        </form>
+
     </div>
 </div>
 
-<ul>
-    <li ng-repeat-start="edge in edges | filter:{name: filterBy.search} | edges:filterBy" ng-click="selectEdge(edge)">
-        <span class="label label-default">{{edge.category.name}}</span>
-        {{edge.name}}
-        <span class="text-muted">({{ displayRequirements(edge.requirements) }})</span>
-    </li>
-    <li ng-repeat-end ng-show="isSelected(edge)">
-        {{edge.description}}
-    </li>
-</ul>

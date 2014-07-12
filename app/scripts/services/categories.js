@@ -1,12 +1,11 @@
 'use strict';
 
-angular.module('swFrontApp').service('categories', function(){
-    this.query = function(){
-        return [
-            {name: 'All'},
-            {name: 'Lorem'},
-            {name: 'Ipsum'},
-            {name: 'Dolor'}
-        ];
-    }
+angular.module('swFrontApp').factory('categories', function($resource, tastypie){
+    return $resource('/api/categories/', {}, {
+        query: {
+            method: 'GET',
+            isArray: true,
+            transformResponse: tastypie.dataTransformer()
+        }
+    })
 });

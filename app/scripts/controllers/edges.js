@@ -10,8 +10,21 @@
 angular.module('swFrontApp')
     .controller('EdgesController', function ($scope, $resource, _, edges, categories, ranks) {
         $scope.edges = edges.query();
-        $scope.categories = categories.query();
+        $scope.categories = [{name: 'All'}];
+        $scope.serverCategories = categories.query(function () {
+            $scope.categories = $scope.categories.concat($scope.serverCategories);
+        });
         $scope.ranks = ranks.query();
+        $scope.clearRanks = $scope.ranks.slice(1);
+
+        $scope.newEdge = new edges;
+        $scope.createEdge = function () {
+            var edge = $scope.newEdge.$save();
+            edge.then(function (response) {
+                $scope.edges.push(response);
+                $scope.newEdge = new edges;
+            });
+        };
 
         $scope.filterBy = {
             search: '',
