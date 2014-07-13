@@ -14,8 +14,10 @@ angular.module('swFrontApp')
         $scope.serverCategories = categories.query(function () {
             $scope.categories = $scope.categories.concat($scope.serverCategories);
         });
-        $scope.ranks = ranks.query();
-        $scope.clearRanks = $scope.ranks.slice(1);
+        $scope.ranks = [{name: 'All'}];
+        $scope.clearRanks = ranks.query(function(){
+            $scope.ranks = $scope.ranks.concat($scope.clearRanks);
+        });
 
         $scope.newEdge = new edges;
         $scope.createEdge = function () {
