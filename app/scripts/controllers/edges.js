@@ -8,30 +8,15 @@
  * Controller of the swFrontApp
  */
 angular.module('swFrontApp')
-    .controller('EdgesController', function ($scope, $resource, _, edges, categories, ranks) {
+    .controller('EdgesController', function ($scope, $resource, _, edges, filterBy) {
         $scope.edges = edges.query();
-        $scope.categories = [{name: 'All'}];
-        $scope.serverCategories = categories.query(function () {
-            $scope.categories = $scope.categories.concat($scope.serverCategories);
-        });
-        $scope.ranks = [{name: 'All'}];
-        $scope.clearRanks = ranks.query(function(){
-            $scope.ranks = $scope.ranks.concat($scope.clearRanks);
-        });
+        $scope.filterBy = filterBy;
 
-        $scope.newEdge = new edges;
-        $scope.createEdge = function () {
-            var edge = $scope.newEdge.$save();
-            edge.then(function (response) {
-                $scope.edges.push(response);
-                $scope.newEdge = new edges;
+        $scope.deleteEdge = function (edge) {
+            edge.$delete({}, function(){
+                var index = $scope.edges.indexOf(edge);
+                delete $scope.edges[index];
             });
-        };
-
-        $scope.filterBy = {
-            search: '',
-            category: $scope.categories[0],
-            rank: $scope.ranks[0]
         };
 
         var selectedEdge = null;
@@ -53,5 +38,4 @@ angular.module('swFrontApp')
             });
             return result.join(', ');
         };
-//        $resource('/api/edges').query();
     });
